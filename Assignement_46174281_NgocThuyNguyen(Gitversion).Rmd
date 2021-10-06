@@ -1,0 +1,59 @@
+---
+title: "Assignment_46174281_NgocThuyNguyen"
+author: "Tracy"
+date: "06/10/2021"
+output:
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Question 1: 
+ a) Produce a scatterplot and correlation matrix of the data and comment on possible relationships between the response and predictors and relationships between the predictors themselves.
+```{r}
+paramo =read.table("paramo.dat", header = TRUE)
+pairs(paramo, panel= panel.smooth)
+cor(paramo)
+```
+* From the scatterplot and correlation matrix, the response is correlated with other predictors and the predictors also have a correlation relationship with each of other predictors. 
+b) Fit a model using all the predictors to explain the N abundance number response. Conduct an F -test for the overall regression
+* The mathematical multiple regression model for this situation: $$Y= \beta_0+ AR\beta_1 +EL\beta_2+ DEc\beta_3+ DNI\beta_4 +\epsilon $$ with $$ \epsilon\sim N(0,\sigma^2)$$
+
+```{r}
+paramo.lm= lm(N ~ AR + EL + DEc + DNI , data = paramo)
+summary(paramo.lm)
+coefficients(paramo.lm)
+```
+- Line of Fit: $$Y= 27.89+ 5.154AR+ 3.075EL- 0.017DEc+ 0.0166DNI$$
+* The Hypotheses for the Overall ANOVA test of multiple regression:
+\begin{flalign*}
+ H_0 &: \beta_1= \beta_2= \beta_3= \beta_4 = 0 & \\
+ H_1 &: \beta_i \neq 0  
+\end{flalign*}
+* Produce an ANOVA table for the overall multiple regression model:
+```{r}
+anova(paramo.lm)
+```
+\begin{flalign*}
+FullRegSS &= RegSS_AR+ RegSS_EL|AR+ RegSS_DEc|AR-EL+ RegSS_DNI|AR-EL-DEc & \\
+            &= 508.92+ 45.9+ 537.39+ 2.06= 1094.27 
+\end{flalign*}
+\begin{flalign*}
+RegM.S &= \frac{RegSS}{k} = \frac{1094.27}{4}= 273.567 &    
+\end{flalign*}
+* F-statistic:
+\begin{flalign*}
+F_obs &= \frac{Reg.M.S}{Res.M.S}= \frac{273.567}{44.95}= 6.086 &
+\end{flalign*} 
+* P-value:
+\begin{flalign*}
+P(F_3,10\geq 6.086) &= 0.01260809 < 0.05 &
+\end{flalign*} 
+* State the null distribution and conclusion:
+  * Reject H_0 when F_obs is too large (>F_3,10)
+  * According to P-value, reject H_0 at the 5% level -->there is a significant linear relationship between response and at least one of the four predictor variables.
+c) Validate the full model using all the predictors and comment on whether it is appropriate to a multiple regression model to explain the N abundance value.
+  
+
+
